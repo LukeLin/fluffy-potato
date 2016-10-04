@@ -1,4 +1,9 @@
-import Token from './Token';
+import {
+    Token,
+    NumToken,
+    StrToken,
+    IdToken
+} from './Token';
 
 const digitReg = /\d+/;
 const identyReg = /[A-Za-z][A-Za-z0-9]*/;
@@ -74,5 +79,48 @@ export default class Lexer {
      * @param {Number} lineNo
      * @param {Array} matcher
      */
-    addToken(lineNo, matcher){}
+    addToken(lineNo, matcher){
+        let m = matcher[1];
+
+        // 不是空格
+        if(m){
+            // 不是注释
+            if(!matcher[2]){
+                let token = null;
+                if(matcher[3]){
+                    token = new NumToken(lineNo, parseInt(m));
+                } else if(matcher[4]){
+                    token = new StrToken(lineNo, this.toStringLiteral(m));
+                } else {
+                    token = new IdToken(lineNo, m);
+                }
+
+                this.queue.push(token);
+            }
+        }        
+    }
+
+    toStringLiteral(s){
+        let str = '';
+
+        let len = s.length - 1;
+        for(let i = 0; i < len; ++i){
+            let c = s.charAt(i);
+
+            if(c === '\\' && i + 1 < len){
+                let c2 = s.charAt(i + 1);
+
+                if(c2 === '"' || c2 === '\\'){
+                    c = s.charAt(++i);
+                } else if(c2 === 'n'){
+                    ++i;
+                    c = '\n';
+                }
+            }
+
+            str += c;
+        }
+
+        return str;
+    }
 }
