@@ -62,13 +62,13 @@ export default class Token {
         if(isIdStart(ch)) return this._readIdent();
         if(isPunc(ch)) {
             return {
-                type: 'punc',
+                type: 'punctuation',
                 value: this.input.next()
             };
         }
         if(isOpChar(ch)){
             return {
-                type: 'op',
+                type: 'operation',
                 value: this._readWhile(isOpChar)
             };
         }
@@ -91,7 +91,7 @@ export default class Token {
 
     _readString(){
         return {
-            type: 'str',
+            type: 'string',
             value: this._readEscaped('"')
         };
     }
