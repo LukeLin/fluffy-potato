@@ -1,72 +1,72 @@
 const KEY_WORDS = 'if then else lambda func true false';
 
-function isKeyword(value){
+function isKeyword(value) {
     return KEY_WORDS.indexOf(` ${ value } `) >= 0;
 }
 
-function isDigit(value){
+function isDigit(value) {
     return /\d/.test(value);
 }
 
-function isIdStart(value){
+function isIdStart(value) {
     return /[a-z_]/i.test(value);
 }
 
-function isId(value){
+function isId(value) {
     return isIdStart(value) || '?!-<>=0123456789'.indexOf(ch) >= 0;
 }
 
-function isOpChar(value){
+function isOpChar(value) {
     return '+-*/%=&|<>!'.indexOf(value) >= 0;
 }
 
-function isPunc(value){
+function isPunc(value) {
     return ',;(){}[]'.indexOf(value) >= 0;
 }
 
-function isWhitespace(value){
+function isWhitespace(value) {
     return '\t\n'.indexOf(value) >= 0;
 }
 
-function nonWrap(value){
+function nonWrap(value) {
     return value !== '\n';
 }
 
 
 export default class Token {
-    constructor(input = ''){
+    constructor(input = '') {
         this.input = input;
         this.current = null;
     }
 
-    next(){
+    next() {
         let token = this.current;
         this.current = null;
 
         return token || this._readNext();
     }
 
-    _readNext(){
+    _readNext() {
         this._readWhile(isWhitespace);
 
-        if(this.input.eof()) return null;
+        if (this.input.eof()) return null;
 
         let ch = this.input.peek();
-        if(ch === '#'){
+        if (ch === '#') {
             this._skipComment();
             return this._readNext();
         }
 
-        if(ch === '"') return this._readString();
-        if(isDigit(ch)) return this._readNumber();
-        if(isIdStart(ch)) return this._readIdent();
-        if(isPunc(ch)) {
+        if (ch === '"') return this._readString();
+        if (isDigit(ch)) return this._readNumber();
+        if (isIdStart(ch)) return this._readIdent();
+        if (isPunc(ch)) {
             return {
                 type: 'punctuation',
                 value: this.input.next()
             };
         }
-        if(isOpChar(ch)){
+        if (isOpChar(ch)) {
             return {
                 type: 'operation',
                 value: this._readWhile(isOpChar)
@@ -76,31 +76,31 @@ export default class Token {
         this.input.croak(`Can't handle character: ${ ch }`);
     }
 
-    _readWhile(predicate){
+    _readWhile(predicate) {
         let str = '';
-        while(!this.input.eof() && predicate(this.input.peek())){
+        while (!this.input.eof() && predicate(this.input.peek())) {
             str += this.input.next();
         }
 
         return str;
     }
 
-    _skipComment(){
+    _skipComment() {
         this._readWhile(nonWrap);
     }
 
-    _readString(){
+    _readString() {
         return {
             type: 'string',
             value: this._readEscaped('"')
         };
     }
 
-    _readNumber(){
+    _readNumber() {
         let hasDot = false;
-        let number = this._readWhile(function(ch){
-            if(ch === '.') {
-                if(hasDot) return false;
+        let number = this._readWhile(function (ch) {
+            if (ch === '.') {
+                if (hasDot) return false;
                 hasDot = true;
                 return true;
             }
@@ -114,7 +114,7 @@ export default class Token {
         };
     }
 
-    _readIdent(){
+    _readIdent() {
         let id = this._readWhile(isId);
 
         return {
@@ -123,21 +123,21 @@ export default class Token {
         };
     }
 
-    _readEscaped(end){
+    _readEscaped(end) {
         let escaped = false;
         let str = '';
 
         this.input.next();
 
-        while(!this.input.eof()){
+        while (!this.input.eof()) {
             let ch = this.input.next();
 
-            if(escaped) {
+            if (escaped) {
                 str += ch;
                 escaped = false;
-            } else if(ch === '\\'){
+            } else if (ch === '\\') {
                 escaped = true;
-            } else if(ch === end){
+            } else if (ch === end) {
                 break;
             } else {
                 str += ch;
@@ -147,15 +147,15 @@ export default class Token {
         return str;
     }
 
-    peek(){
+    peek() {
         return this.current || (this.current = this._readNext());
     }
 
-    eof(){
+    eof() {
         return this.peek() == null;
     }
 
-    croak(){
+    croak() {
         return this.input.croak();
     }
 }
