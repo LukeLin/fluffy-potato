@@ -19,8 +19,8 @@ const PRECEDENCE = {
     '%': 20
 };
 
-export default class Parser {
-    constructor(input) {
+module.exports = class Parser {
+    constructor(input = null) {
         this.input = input;
 
         let prog = [];
@@ -34,7 +34,7 @@ export default class Parser {
 
     isPunc(ch) {
         let tok = this.input.peek();
-        return tok && tok.type === 'punc' && (!ch || tok.value === ch);
+        return tok && tok.type === 'punctuation' && (!ch || tok.value === ch);
     }
 
     isKw(kw) {
@@ -74,11 +74,11 @@ export default class Parser {
             if (hisPrec > myPrec) {
                 this.input.next();
 
-                return maybeBinary({
+                return this.maybeBinary({
                     type: tok.value === '=' ? 'assign' : 'binary',
                     operator: tok.value,
                     left,
-                    right: maybeBinary(this.parseAtom(), hisPrec)
+                    right: this.maybeBinary(this.parseAtom(), hisPrec)
                 }, myPrec);
             }
         }
@@ -151,7 +151,7 @@ export default class Parser {
     parseBool() {
         return {
             type: 'bool',
-            value: this.input.next().value === 'true';
+            value: this.input.next().value === 'true'
         };
     }
 
@@ -162,7 +162,7 @@ export default class Parser {
     }
 
     parseAtom() {
-        return maybeBinary(() => {
+        return this.mayBeCall(() => {
             if (this.isPunc('(')) {
                 this.input.next();
                 let exp = this.parseExpression();
@@ -178,7 +178,7 @@ export default class Parser {
             }
 
             let tok = this.input.next();
-            if (tok.type === 'var' || tok.type === 'num' || tok.type === 'str') return tok();
+            if (tok.type === 'variable' || tok.type === 'number' || tok.type === 'string') return tok;
 
             this.unexpected();
         });

@@ -33,8 +33,8 @@ function nonWrap(value) {
 }
 
 
-export default class Token {
-    constructor(input = '') {
+module.exports = class Token {
+    constructor(input = null) {
         this.input = input;
         this.current = null;
     }
@@ -155,7 +155,7 @@ export default class Token {
         return this.peek() == null;
     }
 
-    croak() {
-        return this.input.croak();
+    croak(msg) {
+        return this.input.croak(msg);
     }
 }

@@ -1,4 +1,4 @@
-export default class InputStream {
+module.exports = class InputStream {
     constructor(input = ''){
         this.input = input;
         this.pos = 0;
@@ -15,6 +15,8 @@ export default class InputStream {
         } else {
             this.col++;
         }
+
+        return ch;
     }
 
     peek(){
@@ -26,6 +28,6 @@ export default class InputStream {
     }
 
     croak(msg){
-        throw new Error(`msg(${ this.line }:${ this.col })`);
+        throw new Error(`${ msg } (${ this.line }:${ this.col })`);
     }
 }
