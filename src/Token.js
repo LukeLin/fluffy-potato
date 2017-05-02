@@ -13,7 +13,7 @@ function isIdStart(value) {
 }
 
 function isId(value) {
-    return isIdStart(value) || '?!-<>=0123456789'.indexOf(ch) >= 0;
+    return isIdStart(value) || '?!-<>=0123456789'.indexOf(value) >= 0;
 }
 
 function isOpChar(value) {

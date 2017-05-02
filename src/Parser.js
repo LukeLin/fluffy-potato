@@ -39,12 +39,12 @@ module.exports = class Parser {
 
     isKw(kw) {
         let tok = this.input.peek();
-        return tok && tok.type === 'kw' && (!kw || tok.value === kw);
+        return tok && tok.type === 'keyword' && (!kw || tok.value === kw);
     }
 
     isOp(op) {
         let tok = this.input.peek();
-        return tok && tok.type === 'op' && (!op || tok.value === op);
+        return tok && tok.type === 'operation' && (!op || tok.value === op);
     }
 
     skipPunc(ch) {
