@@ -1,2 +1,2 @@
 # fluffy-potato
-Interpreter
+Simple Interpreter
