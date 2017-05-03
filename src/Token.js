@@ -25,7 +25,7 @@ function isPunc(value) {
 }
 
 function isWhitespace(value) {
-    return '\t\n'.indexOf(value) >= 0;
+    return ' \t\n'.indexOf(value) >= 0;
 }
 
 function nonWrap(value) {

@@ -96,7 +96,7 @@ module.exports = class Parser {
             if (first) first = false;
             else this.skipPunc(separator);
 
-            a.push(parser);
+            a.push(parser());
         }
 
         this.skipPunc(stop);
@@ -114,7 +114,7 @@ module.exports = class Parser {
 
     parseVarname() {
         let name = this.input.next();
-        if (name.type !== 'var') this.input.croak("Expecting variable name");
+        if (name.type !== 'variable') this.input.croak("Expecting variable name");
         return name.value;
     }
 
@@ -143,7 +143,7 @@ module.exports = class Parser {
     parseLambda() {
         return {
             type: 'lambda',
-            vars: this.delimited('(', ')', ',', this.parseVarname),
+            vars: this.delimited('(', ')', ',', this.parseVarname.bind(this)),
             body: this.parseExpression()
         };
     }
@@ -185,7 +185,7 @@ module.exports = class Parser {
     }
 
     parseProg() {
-        let prog = this.delimited('{', '}', ';', this.parseExpression);
+        let prog = this.delimited('{', '}', ';', this.parseExpression.bind(this));
         if (prog.length === 0) return FALSE;
         if (prog.length === 1) return prog[0];
 
