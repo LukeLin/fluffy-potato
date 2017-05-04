@@ -34,17 +34,17 @@ module.exports = class Parser {
 
     isPunc(ch) {
         let tok = this.input.peek();
-        return tok && tok.type === 'punctuation' && (!ch || tok.value === ch);
+        return tok && tok.type === 'punctuation' && (!ch || tok.value === ch) && tok;
     }
 
     isKw(kw) {
         let tok = this.input.peek();
-        return tok && tok.type === 'keyword' && (!kw || tok.value === kw);
+        return tok && tok.type === 'keyword' && (!kw || tok.value === kw) && tok;
     }
 
     isOp(op) {
         let tok = this.input.peek();
-        return tok && tok.type === 'operation' && (!op || tok.value === op);
+        return tok && tok.type === 'operation' && (!op || tok.value === op) && tok;
     }
 
     skipPunc(ch) {
@@ -108,7 +108,7 @@ module.exports = class Parser {
         return {
             type: 'call',
             func,
-            args: this.delimited('(', ')', ',', this.parseExpression)
+            args: this.delimited('(', ')', ',', this.parseExpression.bind(this))
         };
     }
 

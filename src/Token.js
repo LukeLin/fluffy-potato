@@ -1,7 +1,8 @@
 const KEY_WORDS = 'if then else lambda func true false';
 
 function isKeyword(value) {
-    return KEY_WORDS.indexOf(` ${ value } `) >= 0;
+    return new RegExp('\\b' + value + '\\b').test(KEY_WORDS);
+    // return KEY_WORDS.indexOf(value) >= 0;
 }
 
 function isDigit(value) {
