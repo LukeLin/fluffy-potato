@@ -85,3 +85,16 @@ console.dir(ast, {
     depth: null,
     colors: true
 });
+
+// console.log('\n');
+// var ast = new Parser(new Token(new InputStream(`
+// let (a = 10, b = a * 10) {
+//   a + b;
+// }
+// `)));
+
+// console.dir(ast, {
+//     showHidden: true,
+//     depth: null,
+//     colors: true
+// });

@@ -93,8 +93,11 @@ module.exports = class Parser {
         this.skipPunc(start);
         while (!this.input.eof()) {
             if (this.isPunc(stop)) break;
+
             if (first) first = false;
             else this.skipPunc(separator);
+
+            if (this.isPunc(stop)) break;
 
             a.push(parser());
         }

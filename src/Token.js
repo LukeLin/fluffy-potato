@@ -1,8 +1,7 @@
-const KEY_WORDS = 'if then else lambda func true false';
+const KEY_WORDS = ' if then else lambda λ func true false ';
 
 function isKeyword(value) {
-    return new RegExp('\\b' + value + '\\b').test(KEY_WORDS);
-    // return KEY_WORDS.indexOf(value) >= 0;
+    return KEY_WORDS.indexOf(' ' + value + ' ') >= 0;
 }
 
 function isDigit(value) {
@@ -10,7 +9,7 @@ function isDigit(value) {
 }
 
 function isIdStart(value) {
-    return /[a-z_]/i.test(value);
+    return /[a-zλ_]/i.test(value);
 }
 
 function isId(value) {
